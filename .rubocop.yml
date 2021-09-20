@@ -1,0 +1,14 @@
+require:
+    - rubocop-performance
+
+AllCops:
+    NewCops: enable
+    TargetRubyVersion: "3.0"
+
+Style/StringLiterals:
+    Enabled: true
+    EnforcedStyle: double_quotes
+
+Metrics/MethodLength:
+    CountAsOne: ["hash"]
+    Max: 14
