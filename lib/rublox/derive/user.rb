@@ -22,7 +22,7 @@ module Rublox
     #   # we can now get the owner's join date
     #   puts the_full_user_owner.join_date.inspect # "2008-09-30 15:54:26 UTC"
     # @return [FullUser] a mirrored {FullUser} object, containing new information
-    #   about theuser if it has been changed, or if the user is a {LimitedUser}.
+    #   about the user if it has been changed, or if the user is a {LimitedUser}.
     def refresh
       @client.user_from_id(@id)
     end

@@ -13,12 +13,12 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0"
   spec.files = Dir[
-      "LICENSE",
-      "CHANGELOG.MD",
-      "lib/**/*.rb",
-      "rublox.gemspec",
-      "Gemfile",
-      "Rakefile"
+    "LICENSE",
+    "CHANGELOG.MD",
+    "lib/**/*.rb",
+    "rublox.gemspec",
+    "Gemfile",
+    "Rakefile"
   ]
   spec.extra_rdoc_files = ["README.MD"]
 

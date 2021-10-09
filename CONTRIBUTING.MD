@@ -1,4 +1,4 @@
-# Welcome to the rublo contributing guide
+# Welcome to the rublox contributing guide
 
 Thank you for taking your time to contribute to our project!
 
