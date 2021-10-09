@@ -50,7 +50,7 @@ on your terminal.
 
 # Getting started
 
-The gateway to the API is the `Rublox::Client` -- MAKE THIS LINK TO DOCUMENTATION object. You can initialize it with your _.ROBLOSECURITY_ cookie if you need functionality that needs it.
+The gateway to the API is the [Rublox::Client](https://rubydoc.info/gems/rublox/Rublox/Client) object. You can initialize it with your _.ROBLOSECURITY_ cookie if you need functionality that needs it.
 
 ```ruby
 # Without a cookie
@@ -59,9 +59,9 @@ client = Rublox::Client.new
 client = Rublox::Client.new("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this ...")
 ```
 
-**(if you open-source/work with other people on your application, it is recommended to keep your cookie in a `.env` file and load it with a libray like [dotenv](https://rubygems.org/gems/dotenv))**
+**(if you open-source/work with other people on your application, it is recommended to keep your cookie in a `.env` file and load it with a library like [dotenv](https://rubygems.org/gems/dotenv))**
 
-From there, you can build off your application's logic with methods provided via `Rublox::Client` --SAME HERE.
+From there, you can build off your application's logic with methods provided via [Rublox::Client](https://rubydoc.info/gems/rublox/Rublox/Client)
 
 # Documentation
 
