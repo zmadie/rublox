@@ -39,7 +39,7 @@
 Include rublox in your application's `Gemfile`
 
 ```ruby
-gem "rublox", "~> 0.1.0"
+gem "rublox", "~> 0.2.0"
 ```
 
 or run
