@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     "Gemfile",
     "Rakefile"
   ]
-  spec.extra_rdoc_files = ["README.MD"]
+  spec.extra_rdoc_files = ["README.md"]
 
   spec.add_dependency "http", "~> 5.0.2"
 
