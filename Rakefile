@@ -1,33 +1,25 @@
 # frozen_string_literal: true
 
 require "rake"
+require "rubocop/rake_task"
+require "yard"
 
-desc "run rubocop"
-task :rubocop do
-  system "rubocop"
-end
-
-desc "run tests"
-task :test do
-  system "ruby -I ./lib ./tests/run_tests.rb"
-end
+RuboCop::RakeTask.new
 
 desc "build docs"
-task :docs do
-  system "yardoc"
-end
-
-desc "build docs, showing private objects"
-task :docs_priv do
-  system "yardoc --private"
+YARD::Rake::YardocTask.new do |task|
+	task.name = "build_docs"
 end
 
 desc "open local server to live preview docs"
-task :doc_server do
-  system "yard server --reload"
+task :server do
+	puts "go to http://localhost:8808 to view the docs"
+	server = YARD::CLI::Server.new
+	server.options.update(incremental: true)
+	server.run
 end
 
 desc "list all undocumented objects"
 task :list_undoc do
-  system "yard stats --list-undoc"
+	YARD::CLI::Stats.new.run("--list-undoc")
 end

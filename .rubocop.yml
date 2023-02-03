@@ -1,14 +1,31 @@
 require:
-    - rubocop-performance
+  - rubocop-performance
+  - rubocop-rake
 
 AllCops:
-    NewCops: enable
-    TargetRubyVersion: "3.0"
+  NewCops: enable
+  TargetRubyVersion: "2.7.0"
 
 Style/StringLiterals:
-    Enabled: true
-    EnforcedStyle: double_quotes
+  Enabled: true
+  EnforcedStyle: double_quotes
 
 Metrics/MethodLength:
-    CountAsOne: ["hash"]
-    Max: 14
+  CountAsOne: ["hash", "array", "method_call"]
+  Max: 13
+
+Layout/IndentationStyle:
+  IndentationWidth: 1
+  EnforcedStyle: tabs
+
+Layout/IndentationWidth:
+  Width: 1
+
+Style/Documentation:
+  Enabled: false
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Metrics/AbcSize:
+  Max: 18.55

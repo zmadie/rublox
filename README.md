@@ -24,44 +24,34 @@
   <a href="https://rubydoc.info/gems/rublox">
     <img alt="docs" src="https://img.shields.io/badge/docs-rubydoc.info-aa0000?style=flat-square">
   </a>
-
-  <a href="https://guilded.gg/roblox-api-wrappers">
-    <img alt="support server" src="https://img.shields.io/badge/guilded-support%20server-aa0000.svg?style=flat-square&logo=guilded">
-  </a>
 </div>
 
 <div align="center"> <i>rublox is a Roblox web API wrapper written in Ruby. It aims to provide an object oriented interface to get and modify data from Roblox's web API. </i> </div>
 
 <br>
 
-# Installation
+# Getting Started
 
-Include rublox in your application's `Gemfile`
-
+Authentication can be done by setting the .ROBLOSECURITY cookie through `Rublox.roblosecurity=`
 ```ruby
-gem "rublox", "~> 0.2.0"
+require "rublox"
+
+Rublox.roblosecurity = "cookie"
+
+require "dotenv"
+Dotenv.load
+
+Rublox.roblosecurity = ENV["ROBLOSECURITY"]
 ```
 
-or run
+All classes representing the Roblox API models should not be initialised by the user. Instead, they are all made through methods in modules and classes.
+Models can be found by searching through classes:
 
-> $ gem install rublox
+![](https://cdn.discordapp.com/attachments/827652175609856053/1070881521348653056/image.png)
 
-on your terminal.
+And methods for getting the corresponding model can be found by searching through methods:
 
-# Getting started
-
-The gateway to the API is the [Rublox::Client](https://rubydoc.info/gems/rublox/Rublox/Client) object. You can initialize it with your _.ROBLOSECURITY_ cookie if you need functionality that needs it.
-
-```ruby
-# Without a cookie
-client = Rublox::Client.new
-# With a cookie
-client = Rublox::Client.new("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this ...")
-```
-
-**(if you open-source/work with other people on your application, it is recommended to keep your cookie in a `.env` file and load it with a library like [dotenv](https://rubygems.org/gems/dotenv))**
-
-From there, you can build off your application's logic with methods provided via [Rublox::Client](https://rubydoc.info/gems/rublox/Rublox/Client)
+![](https://cdn.discordapp.com/attachments/827652175609856053/1070881991093919794/image.png)
 
 # Documentation
 

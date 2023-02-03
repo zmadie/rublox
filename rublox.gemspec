@@ -1,32 +1,30 @@
 # frozen_string_literal: true
 
-require_relative "lib/rublox/version"
-
 Gem::Specification.new do |spec|
-  spec.name = "rublox"
-  spec.version = Rublox::VERSION
-  spec.authors = %w[Zamdie Keef]
-  spec.email = "rorg.devv@gmail.com"
-  spec.summary = "A Roblox web API wrapper written in Ruby"
-  spec.description = "This gem allows easy interaction with the Roblox web API via class models."
-  spec.homepage = "https://github.com/roblox-api-wrappers/rublox"
-  spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.0"
-  spec.files = Dir[
-    "LICENSE",
-    "CHANGELOG.MD",
-    "lib/**/*.rb",
-    "rublox.gemspec",
-    "Gemfile",
-    "Rakefile"
-  ]
-  spec.extra_rdoc_files = ["README.md"]
+	spec.name = "rublox"
+	spec.version = "0.3.0"
+	spec.authors = %w[zmλdie keef]
+	spec.email = "rorg.devv@gmail.com"
+	spec.summary = "A Roblox web API wrapper written in Ruby"
+	spec.description = "This gem allows easy interaction with the Roblox web API via modules and classes."
+	spec.homepage = "https://github.com/roblox-api-wrappers/rublox"
+	spec.metadata = {
+		"Documentation" => "https://rubydoc.info/gems/rublox",
+		"rubygems_mfa_required" => "true"
+	}
+	spec.license = "MIT"
+	spec.required_ruby_version = ">= 2.7.0"
+	spec.files = Dir[
+		"README.md",
+		"LICENSE",
+		"lib/**/*.rb",
+		"rublox.gemspec"
+	]
 
-  spec.add_dependency "http", "~> 5.0.2"
+	spec.add_dependency "http", "~> 5.1.1"
 
-  spec.add_development_dependency "dotenv", "~> 2.7"
-  spec.add_development_dependency "rake", "~> 13.0.6"
-  spec.add_development_dependency "rubocop", "~> 1.21.0"
-  spec.add_development_dependency "rubocop-performance", "~> 1.11.5"
-  spec.add_development_dependency "yard", "~> 0.9.26"
+	spec.add_development_dependency "rubocop", "~> 1.44.1"
+	spec.add_development_dependency "rubocop-performance", "~> 1.15.2"
+	spec.add_development_dependency "rubocop-rake", "~> 0.6.0"
+	spec.add_development_dependency "yard", "~> 0.9.28"
 end

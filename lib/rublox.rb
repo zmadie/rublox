@@ -1,136 +1,89 @@
 # frozen_string_literal: true
 
-require "http"
-
-require "rublox/version"
-require "rublox/util/http_client"
-require "rublox/util/cache"
+require "rublox/util/api_helper"
+require "rublox/util/errors"
 require "rublox/models/full_user"
-require "rublox/models/full_group"
+require "rublox/models/skinny_user"
 require "rublox/models/presence"
+require "rublox/bases/base_user"
+require "rublox/bases/base_group"
 
 # rublox is a Roblox web API wrapper written in Ruby. It aims to provide an
 # object oriented interface to get and modify data from Roblox's web API.
-#
-# Repository: https://github.com/roblox-api-wrappers/rublox
-#
 # Docs: https://rubydoc.info/gems/rublox
 module Rublox
-  # The {Client} object is the gateway to the API. Tt supplies methods that
-  # return classes modeled after the interactions you can do with the API.
-  #
-  # Initialize the client with a .ROBLOSECURITY cookie if you need functionality
-  # that requires it.
-  # @example
-  #   require "rublox"
-  #   # without a cookie
-  #   client = Rublox::Client.new
-  #   # with a cookie
-  #   client = Rublox::Client.new("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this ...")
-  class Client
-    # @note The HTTP client should only be used when there are no methods
-    #   provided by the library to achieve what you want.
-    # @return [HTTPClient]
-    attr_reader :http_client
+	# Sets the .ROBLOSECURITY cookie to send authenticated requests
+	def self.roblosecurity=(roblosecurity)
+		APIHelper.roblosecurity = roblosecurity
+	end
 
-    # Initialize the client with a .ROBLOSECURITY cookie if you require functionality
-    # that needs it.
-    # @example
-    #   require "rublox"
-    #   # without a cookie
-    #   client = Rublox::Client.new
-    #   # with a cookie
-    #   client = Rublox::Client.new("_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this ...")
-    # @param roblosecurity [String, nil] a valid .ROBLOSECURITY cookie
-    def initialize(roblosecurity = "")
-      @http_client = HTTPClient.new(roblosecurity)
-    end
+	# Returns the current authenticated user
+	def self.authenticated_user
+		Models::SkinnyUser.new(APIHelper.get("https://users.roblox.com/v1/users/authenticated"))
+	end
 
-    # @example
-    #   client = Rublox::Client.new
-    #   user = client.user_from_id(1)
-    #   puts user.username # -> Roblox
-    # @param id [Integer] the user's ID
-    # @return [FullUser] a model of the user specified by the ID
-    def user_from_id(id)
-      user = Cache.get(Cache::USER, id)
-      return user if user
+	# Returns a BaseUser
+	def self.base_user(id)
+		Bases::BaseUser.new(id)
+	end
 
-      data = @http_client.get(
-        URL.endpoint("users", "v1/users/#{id}")
-      )
-    rescue Errors::UnhandledStatusCodeError
-      raise Errors::UserNotFoundError, id
-    else
-      user = FullUser.new(
-        data,
-        self
-      )
-      Cache.set(Cache::USER, id, user)
+	# Returns a user
+	def self.user_from_id(id)
+		Models::FullUser.new(APIHelper.get("https://users.roblox.com/v1/users/#{id}"))
+	rescue Errors::UnhandledStatusCodeError => e
+		raise Errors::UserNotFoundError, cause: nil if e.response.status == 404
 
-      user
-    end
+		raise
+	end
 
-    # @note This method sends 2 requests, use {#user_from_id} if possible.
-    # @example
-    #   client = Rublox::Client.new
-    #   user = client.user_from_username("Roblox")
-    #   puts user.id # -> 1
-    # @param username [String] the user's username
-    # @return [FullUser] a model of the user specified by the ID
-    def user_from_username(username)
-      data = @http_client.post(
-        URL.endpoint("users", "/v1/usernames/users"),
-        json: {
-          usernames: [username],
-          excludeBannedUsers: false
-        }
-      )["data"]
-      raise Errors::UserNotFoundError.new(nil, username) if data.empty?
+	def self.users_from_ids(ids, exclude_banned_users: false)
+		APIHelper.post(
+			"https://users.roblox.com/v1/users",
+			json: {
+				userIds: ids,
+				excludeBannedUsers: exclude_banned_users
+			}
+		)["data"].map { |data| Models::SkinnyUser.new(data) }
+	end
 
-      user_from_id(
-        data[0]["id"]
-      )
-    end
+	def self.users_from_usernames(usernames, exclude_banned_users: false)
+		APIHelper.post(
+			"https://users.roblox.com/v1/usernames/users",
+			json: {
+				usernames: usernames,
+				excludeBannedUsers: exclude_banned_users
+			}
+		)["data"].map { |data| Models::SkinnyUser.new(data) }
+	end
 
-    # @example
-    #   client = Rublox::Client.new
-    #   group = client.group_from_id(1)
-    #   puts group.name # -> RobloHunks
-    # @param id [Integer] the groups's ID
-    # @return [FullGroup] a model of the group specified by the ID
-    def group_from_id(id)
-      group = Cache.get(Cache::GROUP, id)
-      return group if group
+	def self.user_from_username(username, exclude_banned_users: false)
+		users_from_usernames([username], exclude_banned_users: exclude_banned_users)[0] or raise Errors::UserNotFoundError
+	end
 
-      data = @http_client.get(
-        URL.endpoint("groups", "v1/groups/#{id}")
-      )
-    rescue Errors::UnhandledStatusCodeError
-      raise Errors::GroupNotFoundError, id
-    else
-      group = FullGroup.new(data, self)
-      Cache.set(Cache::GROUP, id, group)
+	def self.base_group(id)
+		Bases::BaseGroup.new(id)
+	end
 
-      group
-    end
+	def self.group_from_id(id)
+		APIHelper.get("https://groups.roblox.com/v1/groups/#{id}")
+	rescue Errors::UnhandledStatusCodeError => e
+		raise Errors::GroupNotFoundError, cause: nil if e.response.status == 400
 
-    # @param id [Integer] the user's ID
-    # @return [Presence] a model of the presence specified by the user's ID
-    def user_presence_from_id(id)
-      data = http_client.post(
-        URL.endpoint("presence", "v1/presence/users"),
-        json: {
-          userIds: [id]
-        }
-      )
-    rescue Errors::UnhandledStatusCodeError
-      raise Errors::PresenceNotFoundError, id
-    else
-      Presence.new(
-        data["userPresences"][0],
-        self
-      )
-    end
-  end
+		raise
+	end
+
+	def self.user_presences_from_ids(ids)
+		APIHelper.post(
+			"https://presence.roblox.com/v1/presence/users",
+			json: { userIds: ids }
+		)["userPresences"].map { |data| Models::Presence.new(data) }
+	rescue Errors::UnhandledStatusCodeError => e
+		raise Errors::PresenceRequestError, cause: nil if e.response.status == 400
+
+		raise
+	end
+
+	def self.user_presence_from_id(id)
+		user_presences_from_ids([id])[0]
+	end
 end

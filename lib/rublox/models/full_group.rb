@@ -1,60 +1,55 @@
 # frozen_string_literal: true
 
-require "rublox/models/group_shout"
-require "rublox/models/limited_user"
 require "rublox/derive/group"
+require "rublox/models/skinny_user"
+require "rublox/models/group_shout"
 
 module Rublox
-  # @note This class is handled internally by the public interface such as
-  #   {Client#group_from_id}. You should not be creating it yourself.
-  # The {FullGroup} class corresponds to a full group response you can get via
-  # https://groups.roblox.com/v1/groups/groupId. You can use it to get information
-  # about groups.
-  #
-  # See {Group} for methods you can call on groups!
-  class FullGroup
-    include Group
+	module Models
+		class FullGroup
+			include Derive::Group
 
-    # @return [Integer] the group's ID
-    attr_reader :id
+			# @return [Integer]
+			attr_reader :id
+			# @return [String]
+			attr_reader :name
+			# @return [String]
+			attr_reader :description
+			# @return [SkinnyUser]
+			attr_reader :owner
+			# @return [GroupShout]
+			attr_reader :shout
+			# @return [Integer]
+			attr_reader :member_count
+			# @return [Boolean]
+			attr_reader :is_builders_club_only
+			# @return [Boolean]
+			attr_reader :public_entry_allowed
+			# @return [Boolean]
+			attr_reader :is_locked
+			# @return [Boolean]
+			attr_reader :has_verified_badge
 
-    # @return [String] the group's name
-    attr_reader :name
+			# @!visibility private
+			def initialize(data)
+				owner_data = data["owner"]
+				shout_data = data["shout"]
+				@id = data["id"]
+				@name = data["name"]
+				@description = data["description"]
+				@owner = SkinnyUser.new(owner_data) if owner_data
+				@shout = GroupShout.new(shout_data) if shout_data
+				@member_count = data["memberCount"]
+				@is_builders_club_only = data["isBuildersClubOnly"]
+				@public_entry_allowed = data["publicEntryAllowed"]
+				@is_locked = !data["isLocked"].nil?
+				@has_verified_badge = data["hasVerifiedBadge"]
+			end
 
-    # @return [String] the group's description
-    attr_reader :description
-
-    # @return [LimitedUser, nil] the group's owner, can be nil if the group has
-    #   no owner
-    attr_reader :owner
-
-    # @return [GroupShout, nil] the group's shout, can be nil if the group has
-    #   no shout
-    attr_reader :shout
-
-    # @return [Integer] the count of how many members the group has
-    attr_reader :member_count
-
-    # @return [true, false] is the group locked?
-    attr_reader :locked
-
-    # @return [true, false] is the group private/invite only?
-    attr_reader :private
-
-    # @param data [Hash]
-    # @param client [Client]
-    def initialize(data, client)
-      @id = data["id"]
-      @name = data["name"]
-      @description = data["description"]
-      @owner = LimitedUser.new(data["owner"], client) if data["owner"]
-      @shout = GroupShout.new(data["shout"], client, @id) if data["shout"]
-      @member_count = data["memberCount"]
-      # isLocked is only returned if the group is locked, else it is just null (awesome)
-      @locked = !data["isLocked"].nil?
-      @private = data["publicEntryAllowed"]
-
-      @client = client
-    end
-  end
+			# Updates the group shout and sets {#shout} to the new group shout
+			def update_shout!(message)
+				@shout = update_shout(message)
+			end
+		end
+	end
 end
