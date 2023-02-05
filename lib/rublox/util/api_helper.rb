@@ -46,6 +46,8 @@ module Rublox
 							"x-csrf-token" => response.headers
 						}
 					)
+				else
+					raise Errors::UnhandledStatusCodeError.new(response, get_errors_from_response(response))
 				end
 			when 401
 				raise Errors::InvalidROBLOSECURITYError
