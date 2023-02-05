@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
 	spec.name = "rublox"
-	spec.version = "0.3.0"
+	spec.version = "0.3.1"
 	spec.authors = %w[zmλdie keef]
 	spec.email = "rorg.devv@gmail.com"
 	spec.summary = "A Roblox web API wrapper written in Ruby"
