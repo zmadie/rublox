@@ -14,16 +14,19 @@ module Rublox
 				))
 			end
 
+			# @return [nil]
 			def accept_join_request(user_id)
 				APIHelper.post("https://groups.roblox.com/v1/groups/#{@id}/join-requests/users/#{user_id}")
 				nil
 			end
 
+			# @return [nil]
 			def decline_join_request(user_id)
 				APIHelper.delete("https://groups.roblox.com/v1/groups/#{@id}/join-requests/users/#{user_id}")
 				nil
 			end
 
+			# @return [nil]
 			def kick(user_id)
 				APIHelper.delete("https://groups.roblox.com/v1/groups/#{@id}/users/#{user_id}")
 				nil

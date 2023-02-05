@@ -32,10 +32,12 @@ module Rublox
 			attr_reader :user_presence_type
 			# @return [String]
 			attr_reader :last_location
+
 			# attr_reader :place_id
 			# attr_reader :root_place_id
 			# attr_reader :game_id
 			# attr_reader :universe_id
+
 			# @return [Bases::BaseUser]
 			attr_reader :user
 			# @return [Time]

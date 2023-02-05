@@ -13,7 +13,7 @@ module Rublox
 			attr_reader :created
 			# @return [Boolean]
 			attr_reader :is_banned
-			# @return [String?]
+			# @return [String, nil]
 			attr_reader :external_app_display_name
 			# @return [Boolean]
 			attr_reader :has_verified_badge

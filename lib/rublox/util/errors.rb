@@ -33,7 +33,7 @@ module Rublox
 			end
 		end
 
-		# This error is raised when a method that requires authenticated is called without a valid .ROBLOSECURITY cookie set
+		# This error is raised when a method that requires authentication is called without a valid .ROBLOSECURITY cookie set
 		class InvalidROBLOSECURITYError < StandardError
 			# @!visibility private
 			def initialize

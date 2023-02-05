@@ -8,7 +8,7 @@ module Rublox
 		module User
 			include Model
 
-			# @return [Number] the amount of robux the current authenticated user has
+			# @return [Integer] the amount of robux the current authenticated user has
 			def currency
 				APIHelper.get("https://economy.roblox.com/v1/users/#{@id}/currency")["robux"]
 			end

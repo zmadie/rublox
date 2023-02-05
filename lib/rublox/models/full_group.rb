@@ -15,9 +15,9 @@ module Rublox
 			attr_reader :name
 			# @return [String]
 			attr_reader :description
-			# @return [SkinnyUser]
+			# @return [SkinnyUser, nil]
 			attr_reader :owner
-			# @return [GroupShout]
+			# @return [GroupShout, nil]
 			attr_reader :shout
 			# @return [Integer]
 			attr_reader :member_count
@@ -47,6 +47,7 @@ module Rublox
 			end
 
 			# Updates the group shout and sets {#shout} to the new group shout
+			# @return [nil]
 			def update_shout!(message)
 				@shout = update_shout(message)
 			end

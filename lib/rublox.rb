@@ -13,21 +13,22 @@ require "rublox/bases/base_group"
 # Docs: https://rubydoc.info/gems/rublox
 module Rublox
 	# Sets the .ROBLOSECURITY cookie to send authenticated requests
+	# @return [nil]
 	def self.roblosecurity=(roblosecurity)
 		APIHelper.roblosecurity = roblosecurity
 	end
 
-	# Returns the current authenticated user
+	# @return [Models::SkinnyUser] the current authenticated user
 	def self.authenticated_user
 		Models::SkinnyUser.new(APIHelper.get("https://users.roblox.com/v1/users/authenticated"))
 	end
 
-	# Returns a BaseUser
+	# @return [Bases::BaseUser]
 	def self.base_user(id)
 		Bases::BaseUser.new(id)
 	end
 
-	# Returns a user
+	# @return [Models::FullUser]
 	def self.user_from_id(id)
 		Models::FullUser.new(APIHelper.get("https://users.roblox.com/v1/users/#{id}"))
 	rescue Errors::UnhandledStatusCodeError => e
@@ -36,6 +37,7 @@ module Rublox
 		raise
 	end
 
+	# @return [Array<Models::SkinnyUser>]
 	def self.users_from_ids(ids, exclude_banned_users: false)
 		APIHelper.post(
 			"https://users.roblox.com/v1/users",
@@ -46,6 +48,7 @@ module Rublox
 		)["data"].map { |data| Models::SkinnyUser.new(data) }
 	end
 
+	# @return [Array<Models::SkinnyUser>]
 	def self.users_from_usernames(usernames, exclude_banned_users: false)
 		APIHelper.post(
 			"https://users.roblox.com/v1/usernames/users",
@@ -56,22 +59,26 @@ module Rublox
 		)["data"].map { |data| Models::SkinnyUser.new(data) }
 	end
 
+	# @return [Models::SkinnyUser]
 	def self.user_from_username(username, exclude_banned_users: false)
 		users_from_usernames([username], exclude_banned_users: exclude_banned_users)[0] or raise Errors::UserNotFoundError
 	end
 
+	# @return [Bases::BaseUser]
 	def self.base_group(id)
 		Bases::BaseGroup.new(id)
 	end
 
+	# @return [Models::FullGroup]
 	def self.group_from_id(id)
-		APIHelper.get("https://groups.roblox.com/v1/groups/#{id}")
+		Models::FullGroup.new(APIHelper.get("https://groups.roblox.com/v1/groups/#{id}"))
 	rescue Errors::UnhandledStatusCodeError => e
 		raise Errors::GroupNotFoundError, cause: nil if e.response.status == 400
 
 		raise
 	end
 
+	# @return [Array<Models::Presence>]
 	def self.user_presences_from_ids(ids)
 		APIHelper.post(
 			"https://presence.roblox.com/v1/presence/users",
@@ -83,6 +90,7 @@ module Rublox
 		raise
 	end
 
+	# @return [Models::Presence]
 	def self.user_presence_from_id(id)
 		user_presences_from_ids([id])[0]
 	end
