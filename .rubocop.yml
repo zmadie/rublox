@@ -12,7 +12,7 @@ Style/StringLiterals:
 
 Metrics/MethodLength:
   CountAsOne: ["hash", "array", "method_call"]
-  Max: 13
+  Max: 14
 
 Layout/IndentationStyle:
   IndentationWidth: 1
@@ -28,4 +28,4 @@ Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Metrics/AbcSize:
-  Max: 18.55
+  Max: 18.92

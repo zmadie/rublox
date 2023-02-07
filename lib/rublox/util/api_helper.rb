@@ -40,15 +40,13 @@ module Rublox
 			when 200
 				JSON.parse(response.body)
 			when 403
-				if JSON.parse(response.body).any? { |error| error.code.zero? }
-					@client = @client.headers(
-						{
-							"x-csrf-token" => response.headers
-						}
-					)
-				else
+				unless JSON.parse(response.body).any? { |error| error.code.zero? }
 					raise Errors::UnhandledStatusCodeError.new(response, get_errors_from_response(response))
 				end
+
+				@client = @client.headers({
+					"x-csrf-token" => response.headers
+				})
 			when 401
 				raise Errors::InvalidROBLOSECURITYError
 			else
